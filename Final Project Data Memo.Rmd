@@ -1,0 +1,28 @@
+---
+title: "PSTAT 131 Final Project Data Memo"
+author: "Logan Greenough"
+date: "9/30/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# PSTAT 131 Final Project Data Memo
+
+## Overview of the Dataset
+
+I have decided to do my final project on Horse Racing in Hong Kong. Like the United States, horse racing is a big deal in Hong Kong. Therefore the goal of my final project is to create a model that will be able to predict the winner of a race based on a variety of factors. I found this data set on Kaggle.com(https://www.kaggle.com/datasets/gdaley/hkracing). This data set has 2 .csv files one containing race data(races.csv) in which all of the factors describe the condition of the race, and the other describes all of the characteristics of one horse run(runs.csv). All of this data was collected by the author on Kaggle from various free sources, but he doesn't name the sources explicitly. The runs.csv file has 37 predictors, many of which are empty since they represent the time it took for the leader of the race to reach a certain section of the track and some tracks do not have the 4-7 sections of the track(based on the length of the race). Within this runs.csv file there are observations for 6,348 unique horse races. The races.csv file has details to the race conditions for the 6,348 races, and it also have 37 predictors, many of which have to do with gambling and payouts which I am not interested in including in my model. The types of variables that I will be working with have to deal mainly with the horses, the jockeys, and the conditions of the race. I may also factor in the odds of a horse, if this seems to be connected with how a horse finishes. As previously mentioned, there is some data that is "missing". This however will not be a big deal because this missing data is attributed to certain sections of the track, which may not be applicable if a race is a shorter length. I would estimate that the majority of races lack sections 4-7 of the race, which means that most of the races are short. One way to overcome this could be to only do races of a certain length, since some horses may be better suited to run shorter distances and some could be better suited to run longer. 
+
+## Overview of My Research Questions
+
+The variable that I am most interested in predicting is which horse will win a race before the race takes place. A secondary goal is to see if I could reliably predict the top 3 finishers, as this will prove to be a bit harder than just the 1st place finishers. The 1st place finishing horse will be my response/outcome variable, and this will obviously be determined by the horse that cross the finish line first. I think that this question will be best answered by the classification approach rather than the regression since I am trying to predict which horse will win the race, thus making it qualitiative. The predictors that I think will be especially useful is the type of horse, previous races for each of the horses, jockey weight, the conditions for the race, and the track length. Based on the question that I want to answer I would say that the goal of my model will be predictive, since I am trying to predict which horse will win the race.
+
+## Proposed Project Timeline
+
+I hope to begin my exploratory analysis next week, since this will allow me to decide if this project will be possible given the data that I have. As of right now I have very minimal knowledge of how machine learning works, so as I learn more in lecture and develop more skills in section I will make progress on my project. I am also taking PSTAT 175 which is a project heavy class, so I will do my best to balance my time and make progress on both of them in tandem. Ideally, I would like to be done with building the model by week 6 of the class, so that I can spend the rest of the time doing the write up for it, and then ultimately being completely done with it before the start of finals. I am not sure if this is an attainable timeline given my current knowledge level, so I would love to hear some feedback about my plan!
+
+## Questions and Concerns
+
+I do anticipate to run into quite a few problems mostly associated with my lack of knowledge in the realm of machine learning. Aside from this, I do anticipate there to be an element of randomness in how the horses will perform since they are animals and not machines. What I mean by this is that some days the horses won't race their best, for whatever reason, that won't be apparent based on the parameters that I have data on. Two major questions that I have is if my timeline for the project looks okay, and if we'll be given a checklist of everything that will need to be addressed in our final project.
