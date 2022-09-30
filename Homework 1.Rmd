@@ -2,7 +2,9 @@
 title: "PSTAT 131 Homework 1"
 author: "Logan Greenough"
 date: '2022-09-28'
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
