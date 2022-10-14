@@ -1,0 +1,96 @@
+---
+title: "PSTAT 131 Homework 2"
+author: "Logan Greenough"
+date: "10/4/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(tidymodels)
+
+abalone <- read_csv("abalone.csv")
+```
+
+## Question 1
+
+```{r}
+abalone <- abalone %>% mutate(age = rings + 1.5)
+
+hist(abalone$age, main = "Histogram of Abalone Age")
+```
+Based on a histogram for abalone age, we can see that there is a skew to the right, with the majority of the observations being in the 10 to 15 year range.
+
+## Question 2
+
+```{r}
+set.seed(805)
+
+abalone_split <- initial_split(abalone, prop = 0.7, strata = age)
+abalone_train <- training(abalone_split)
+abalone_test <- testing(abalone_split)
+```
+
+## Question 3
+
+```{r}
+#Step 1
+simple_abalone_recipe <- recipe(age ~., data = abalone_train) %>% step_rm(rings) %>% step_dummy(type)
+
+#Step 2
+simple_abalone_recipe <- simple_abalone_recipe %>% step_interact( ~ type_M:shucked_weight + type_I:shucked_weight + longest_shell:diameter + shucked_weight:shell_weight)
+
+#Step 3
+simple_abalone_recipe <- simple_abalone_recipe %>% step_center(all_predictors())
+
+#Step 4
+simple_abalone_recipe <- simple_abalone_recipe %>% step_scale(all_predictors())
+```
+
+We should not use rings to predict age because we are trying to create a model that will be able to predict the age of an abalone without the data for the number of rings. This is due to the fact that in order to know the number of rings, the abalone has to be cut open and the rings have to be counted under a microscope.
+
+## Question 4
+
+```{r}
+lm_model <- linear_reg() %>% set_engine("lm")
+```
+
+## Question 5
+
+```{r}
+lm_wflow <- workflow() %>% 
+  add_model(lm_model) %>% 
+  add_recipe(simple_abalone_recipe)
+```
+
+## Question 6
+
+```{r}
+lm_fit <- fit(lm_wflow, abalone_train)
+
+lm_fit %>% extract_fit_parsnip() %>% tidy()
+
+test_data = tibble(type = "F", longest_shell = 0.50, diameter = 0.10, height = 0.30, whole_weight = 4, shucked_weight = 1, viscera_weight = 2, shell_weight = 1, rings = 0)
+
+test_results <- predict(lm_fit, new_data = test_data)
+
+test_results
+```
+
+## Question 7
+
+```{r}
+library(yardstick)
+
+abalone_training_res <- predict(lm_fit, new_data = abalone_train %>% select(-age))
+
+abalone_training_res <- bind_cols(abalone_training_res, abalone_train %>% select(age))
+
+abalone_metrics <- metric_set(rmse, rsq, mae)
+abalone_metrics(abalone_training_res, truth = age, estimate = .pred)
+```
+
+Our model returns a RMSE of 2.117829, a MAE of 1.529558, and an $R^2$ of 0.560166. This can be interpreted as the regression model being able to explain 56% of the observed data and is about middle of the road when it comes to how well the model fits the data set.
